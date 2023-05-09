@@ -3,28 +3,36 @@ package br.com.jonatas.apilogin.service;
 import br.com.jonatas.apilogin.model.User;
 import br.com.jonatas.apilogin.record.UserDto;
 import br.com.jonatas.apilogin.repository.UserRepository;
-import org.modelmapper.ModelMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.stream.Stream;
+
 @Service
+@Slf4j
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
 
     public void createUser(UserDto userDto) {
+
         this.userRepository.findByEmail(userDto.email())
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.BAD_REQUEST, "email ja esta sendo usado"));
+                .ifPresent((u) -> {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "email ja esta sendo usado");
+                });
 
-        ModelMapper modelMapper = new ModelMapper();
+        User user = User.builder()
+                .fullName(userDto.fullName())
+                .username(userDto.username())
+                .email(userDto.email())
+                .password(userDto.password())
+                .build();
 
-        User user = new User();
 
-        modelMapper.map(userDto, user);
         this.userRepository.save(user);
     }
 
