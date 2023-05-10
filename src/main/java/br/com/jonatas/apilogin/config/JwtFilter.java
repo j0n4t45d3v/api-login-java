@@ -13,5 +13,6 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         System.out.println("passou o filtro");
         filterChain.doFilter(request, response);
+
     }
 }

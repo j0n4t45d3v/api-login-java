@@ -70,11 +70,11 @@ public class UserService {
 
     public String login(LoginDto login){
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(login.username(), login.password());
-        System.out.println(authenticationToken);
+
         Authentication authenticate = this.authenticationManager.authenticate(authenticationToken);
 
         User userToken = (User) authenticate.getPrincipal();
-
+        System.out.println(userToken);
         return TokenUtil.encoder(userToken);
     }
 }

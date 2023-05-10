@@ -1,6 +1,7 @@
 package br.com.jonatas.apilogin.controller;
 
 import br.com.jonatas.apilogin.record.LoginDto;
+import br.com.jonatas.apilogin.record.TokenDto;
 import br.com.jonatas.apilogin.record.UserDto;
 import br.com.jonatas.apilogin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,14 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto login){
-        return null;
+        try{
+            var token = this.userService.login(login);
+            return ResponseEntity.ok(new TokenDto(token));
+        } catch (ResponseStatusException error) {
+            return ResponseEntity.status(error.getStatusCode()).body(error.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
