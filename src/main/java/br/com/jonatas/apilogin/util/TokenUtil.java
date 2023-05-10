@@ -26,4 +26,8 @@ public class TokenUtil {
     public static String decoder(UserDto user) {
         return null;
     }
+
+    public static boolean ContainsToken(String token) {
+        return token != null && token.startsWith("Bearer ");
+    }
 }
